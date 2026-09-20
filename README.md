@@ -1,6 +1,6 @@
 # Duo Systems on Snapdragon 8 Elite Tablet
 
-A dual-system computing platform built on a Qualcomm Snapdragon 8 Elite tablet, combining Android with a full ARM64 Ubuntu Linux environment.
+A dual-system computing platform built on a Qualcomm Snapdragon 8 Elite tablet (Lenovo Y900), combining Android with a full ARM64 Ubuntu Linux environment.
 
 The project explores how far a modern mobile SoC can be pushed as a general-purpose Linux computer, including GPU-accelerated computing, Vulkan graphics, desktop Linux, development tools, and local AI inference.
 
@@ -35,9 +35,9 @@ The Linux environment runs on the same Snapdragon 8 Elite hardware while retaini
 
 ## Hardware
 
-- **Device:** Lenovo Snapdragon 8 Elite tablet
+- **Device:** Lenovo Y900 tablet
 - **SoC:** Qualcomm Snapdragon 8 Elite
-- **CPU:** ARM64
+- **CPU:** Qualcomm Snapdragon 8 Elite
 - **GPU:** Qualcomm Adreno 830
 - **Memory:** 16 GB RAM
 - **Storage:** 512 GB
