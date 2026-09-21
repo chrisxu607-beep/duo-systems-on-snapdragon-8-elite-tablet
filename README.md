@@ -43,6 +43,8 @@ Instead of treating the tablet purely as an Android device, the project creates 
 
 The Linux environment runs on the same Snapdragon 8 Elite hardware while retaining access to the device's CPU and GPU capabilities.
 
+Benchmarks and experiments will be posted soon.
+
 ## System Architecture
 
 ```text
