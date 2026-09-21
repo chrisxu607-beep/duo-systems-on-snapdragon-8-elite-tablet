@@ -1,4 +1,4 @@
-# why I am doing this
+# Why I am doing this
 
 In early 2026, we've seen the price of SSDs and RAM rocketed up, and the cost of purchasing a new laptop for university is now being too much for many students. This project is an attempt to explore whether a modern mobile SoC can be used as a general-purpose Linux computer, and whether it can be used for CS undergraduate study. 
 
