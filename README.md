@@ -1,37 +1,73 @@
+# why I am doing this
+
+In early 2026, we've seen the price of SSDs and RAM rocketed up, and the cost of purchasing a new laptop for university is now being too much for many students. This project is an attempt to explore whether a modern mobile SoC can be used as a general-purpose Linux computer, and whether it can be used for CS undergraduate study. 
+
 # Duo Systems on Snapdragon 8 Elite Tablet
 
-A dual-system computing platform built on a Qualcomm Snapdragon 8 Elite tablet (Lenovo Y900), combining Android with a full ARM64 Ubuntu Linux environment.
+A dual-system computing platform built on a Lenovo Y900 tablet with a Qualcomm Snapdragon 8 Elite SoC, combining Android with a full ARM64 Ubuntu Linux environment.
 
-The project explores how far a modern mobile SoC can be pushed as a general-purpose Linux computer, including GPU-accelerated computing, Vulkan graphics, desktop Linux, development tools, and local AI inference.
+The project explores how far a modern mobile SoC can be used as a general-purpose Linux computer, including desktop Linux, GPU-accelerated computing, Vulkan graphics, native ARM64 development, and local AI inference.
 
 ## Overview
 
-The system uses a Lenovo tablet based on the **Qualcomm Snapdragon 8 Elite** platform.
+The system uses a Lenovo tablet (Y900) based on the **Qualcomm Snapdragon 8 Elite** platform.
 
 Instead of treating the tablet purely as an Android device, the project creates a second Linux environment running alongside Android:
 
 ```text
-┌─────────────────────────────────────┐
-│            Android System           │
-│                                     │
-│   Native Android applications      │
-│   Android hardware / device stack  │
-└──────────────────┬──────────────────┘
-                   │
-                   │ Termux
-                   │
-┌──────────────────▼──────────────────┐
-│          Ubuntu 24.04 ARM64         │
-│                                     │
-│  XFCE Desktop                       │
-│  Development Environment            │
-│  Vulkan / Turnip                    │
-│  llama.cpp                          │
-│  Local AI Inference                 │
-└─────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│                 Android                     │
+│                                             │
+│  Android applications                       │
+│  Android kernel / hardware interfaces       │
+│  Qualcomm device drivers                    │
+└──────────────────────┬──────────────────────┘
+                       │
+                    Termux
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+   Termux:X11                    Ubuntu 24.04
+        │                         ARM64 rootfs
+        │                             │
+        │                    ┌────────┴────────┐
+        │                    │                 │
+        │                  XFCE          Development
+        │                                    │
+        │                              Vulkan / Turnip
+        │                                    │
+        └─────────────── X11 ────────────────┘
+                                             │
+                                         applications (codium, llama.cpp, etc.)
 ```
 
 The Linux environment runs on the same Snapdragon 8 Elite hardware while retaining access to the device's CPU and GPU capabilities.
+
+## System Architecture
+
+```text
+┌───────────────────────────────────────────────┐
+│                  Android                      │
+│                                               │
+│  Android userspace                            │
+│  Qualcomm hardware / kernel interfaces        │
+│                                               │
+└───────────────────────┬───────────────────────┘
+                        │
+                     Termux
+                        │
+                Ubuntu ARM64 rootfs
+                        │
+        ┌───────────────┼────────────────┐
+        │               │                │
+      XFCE          Development       Vulkan
+        │               │                │
+   Termux:X11      GCC / Python       Turnip
+                        │                │
+                    code-server      Adreno 830
+                        │
+                     llama.cpp
+```
 
 ## Hardware
 
@@ -63,7 +99,7 @@ Android
         └── llama.cpp
 ```
 
-The system uses a chroot-style Ubuntu environment with access to selected Android kernel interfaces and devices.
+The system uses an Ubuntu ARM64 root filesystem launched from Termux, with selected Android kernel interfaces and devices exposed to the Linux environment.
 
 ## Desktop Environment
 
@@ -96,26 +132,17 @@ while Vulkan remains available to applications independently of the desktop comp
 
 ## GPU Acceleration
 
-The Adreno 830 is exposed to Linux through Qualcomm's KGSL interface.
+The Adreno 830 is exposed to the Linux environment through Qualcomm's KGSL kernel interface.
 
-Mesa's **Turnip** Vulkan driver is used to provide Vulkan support.
+Mesa's **Turnip** Vulkan driver provides native Vulkan support for the Adreno GPU.
 
-The project required building a recent Mesa development version because older Mesa releases did not contain the required Adreno 830 device support.
-
-Current configuration:
+The working configuration is:
 
 ```text
-GPU:
-Adreno (TM) 830v1
-
-Vulkan:
-1.4.362
-
-Driver:
-Mesa Turnip
-
-Mesa:
-26.3.0-devel
+GPU:     Adreno (TM) 830v1
+Vulkan:  1.4.362
+Driver:  Mesa Turnip
+Mesa:    26.3.0-devel
 ```
 
 The Vulkan device can be verified with:
