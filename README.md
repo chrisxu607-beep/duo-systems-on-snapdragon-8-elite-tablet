@@ -208,6 +208,7 @@ This repository documents the **underlying hardware and Linux platform**.
 The local AI inference work is documented separately:
 
 **[`local-llm-on-phone-chip`](../local-llm-on-phone-chip)**
+(not posted yet)
 
 That repository focuses specifically on running quantized LLMs on the Snapdragon 8 Elite / Adreno 830 platform.
 
